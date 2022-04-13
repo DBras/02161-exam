@@ -2,11 +2,11 @@ Feature: Create new project
   Description: A new project is created in the system
   Actors: Developer
 
-#  Scenario: Create project with name successfully
-#    Given that there is a project with title "New Software Project" and starting date "02-11-2022"
-#    When the project is added
-#    Then a project with title "New Software Project" and starting date "02-11-2022" is in the sytem
-#    And there are no projects with the same project number
+  Scenario: Create project with name successfully
+    Given that there is a project with title "New Software Project" and starting date "2022-11-02"
+    When the project is added
+    Then a project with title "New Software Project" and starting date "2022-11-02" is in the system
+    And there are no two projects with the same project number in the system
 
 #  Scenario: Project with name exists in database
 #    Given that there is a project with title "New Software Project" and starting date "02-11-2022"
