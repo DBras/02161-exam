@@ -1,5 +1,6 @@
 package plannerapp;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.cucumber.java.en.And;
@@ -8,11 +9,17 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 import java.time.LocalDate;
-import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ProjectSteps {
-    Project project;
-    LocalDate date;
+    private Project project;
+    private LocalDate date;
+    private PlannerApp planner_app;
+
+    public ProjectSteps(PlannerApp planner_app) {
+        this.planner_app = planner_app;
+    }
 
     @Given("that there is a project with title {string} and starting date {string}")
     public void that_there_is_a_project_with_title_and_starting_date(String title, String start_date_string) {
@@ -24,14 +31,13 @@ public class ProjectSteps {
 
     @When("the project is added")
     public void the_project_is_added() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+        planner_app.addProject(project);
     }
 
     @Then("a project with title {string} and starting date {string} is in the system")
-    public void a_project_with_title_and_starting_date_is_in_the_sytem(String string, String string2) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    public void a_project_with_title_and_starting_date_is_in_the_sytem(String title, String start_date_string) {
+        Object[] projects = planner_app.searchProjects(title);
+        assertEquals(1, projects.length);
     }
 
     @Given("there is a project in app with title {string} and starting date {string}")
@@ -60,6 +66,10 @@ public class ProjectSteps {
 
     @And("there are no two projects with the same project number in the system")
     public void thereAreNoTwoProjectsWithTheSameProjectNumberInTheSystem() {
-        throw new io.cucumber.java.PendingException();
+        Set<Integer> unique_project_numbers = planner_app.projects.stream()
+                .map(Project::getProject_id)
+                .collect(Collectors.toSet());
+        System.out.println(unique_project_numbers);
+        assertEquals(unique_project_numbers.size(), planner_app.projects.size());
     }
 }
