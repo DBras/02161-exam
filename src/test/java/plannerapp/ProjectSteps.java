@@ -7,6 +7,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import net.bytebuddy.asm.Advice;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -36,7 +37,8 @@ public class ProjectSteps {
 
     @Then("a project with title {string} and starting date {string} is in the system")
     public void a_project_with_title_and_starting_date_is_in_the_sytem(String title, String start_date_string) {
-        Object[] projects = planner_app.searchProjects(title);
+        LocalDate date = LocalDate.parse(start_date_string);
+        Object[] projects = planner_app.searchProjects(title, date);
         assertEquals(1, projects.length);
     }
 
@@ -53,15 +55,16 @@ public class ProjectSteps {
     }
 
     @Given("that there is a project with no name and starting date {string}")
-    public void that_there_is_a_project_with_no_name_and_starting_date(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    public void that_there_is_a_project_with_no_name_and_starting_date(String start_date_string) {
+        LocalDate date = LocalDate.parse(start_date_string);
+        project = new Project(date);
     }
 
     @Then("there is a new project with no name and starting date {string} in the system")
-    public void there_is_a_new_project_with_no_name_and_starting_date_in_the_system(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    public void there_is_a_new_project_with_no_name_and_starting_date_in_the_system(String start_date_string) {
+        LocalDate date = LocalDate.parse(start_date_string);
+        Object[] projects = planner_app.searchProjects("", date);
+        assertEquals(1, projects.length);
     }
 
     @And("there are no two projects with the same project number in the system")
@@ -69,7 +72,6 @@ public class ProjectSteps {
         Set<Integer> unique_project_numbers = planner_app.projects.stream()
                 .map(Project::getProject_id)
                 .collect(Collectors.toSet());
-        System.out.println(unique_project_numbers);
         assertEquals(unique_project_numbers.size(), planner_app.projects.size());
     }
 }

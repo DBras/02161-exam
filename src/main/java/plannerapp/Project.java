@@ -13,7 +13,16 @@ public class Project {
     public Project(String title, LocalDate start_date) {
         this.title = title;
         this.start_date = start_date;
-        this.project_id = (start_date.getYear() % 1000) * 1000 + (++rolling_project_id);
+        this.project_id = nextProjectID(start_date);
+    }
+    public Project(LocalDate start_date) {
+        this.title = "";
+        this.start_date = start_date;
+        this.project_id = nextProjectID(start_date);
+    }
+
+    public int nextProjectID(LocalDate start_date) {
+        return (start_date.getYear() % 1000) * 1000 + (++rolling_project_id);
     }
 
     public String getTitle() {
