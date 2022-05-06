@@ -3,13 +3,14 @@ package plannerapp;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import io.cucumber.java.an.E;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import net.bytebuddy.asm.Advice;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -17,9 +18,11 @@ public class ProjectSteps {
     private Project project;
     private LocalDate date;
     private PlannerApp planner_app;
+    private ErrorMessageHolder error_message_holder;
 
     public ProjectSteps(PlannerApp planner_app) {
         this.planner_app = planner_app;
+        this.error_message_holder = new ErrorMessageHolder();
     }
 
     @Given("that there is a project with title {string} and starting date {string}")
@@ -32,13 +35,17 @@ public class ProjectSteps {
 
     @When("the project is added")
     public void the_project_is_added() {
-        planner_app.addProject(project);
+        try {
+            planner_app.addProject(project);
+        } catch (OperationNotAllowedException e) {
+            this.error_message_holder.setErrorMessage(e.getMessage());
+        }
     }
 
-    @Then("a project with title {string} and starting date {string} is in the system")
-    public void a_project_with_title_and_starting_date_is_in_the_sytem(String title, String start_date_string) {
+    @Then("a project with title {string} and starting date {string} is contained in the system")
+    public void a_project_with_title_and_starting_date_is_in_the_system(String title, String start_date_string) {
         LocalDate date = LocalDate.parse(start_date_string);
-        Object[] projects = planner_app.searchProjects(title, date);
+        Object[] projects = planner_app.searchProjectsByTitleAndDate(title, date);
         assertEquals(1, projects.length);
     }
 
@@ -49,9 +56,8 @@ public class ProjectSteps {
     }
 
     @Then("the error {string} is given")
-    public void the_error_is_given(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    public void the_error_is_given(String error_message) {
+        assertEquals(error_message, this.error_message_holder.getErrorMessage());
     }
 
     @Given("that there is a project with no name and starting date {string}")
@@ -63,7 +69,7 @@ public class ProjectSteps {
     @Then("there is a new project with no name and starting date {string} in the system")
     public void there_is_a_new_project_with_no_name_and_starting_date_in_the_system(String start_date_string) {
         LocalDate date = LocalDate.parse(start_date_string);
-        Object[] projects = planner_app.searchProjects("", date);
+        Object[] projects = planner_app.searchProjectsByTitleAndDate("", date);
         assertEquals(1, projects.length);
     }
 
@@ -74,4 +80,13 @@ public class ProjectSteps {
                 .collect(Collectors.toSet());
         assertEquals(unique_project_numbers.size(), planner_app.projects.size());
     }
+
+    @Given("these projects are contained in the system")
+    public void these_projects_are_contained_in_the_system(List<List<String>> projects) throws Exception{
+        for (List<String> project_info : projects) {
+            planner_app.addProject(new Project(project_info.get(0),
+                                                LocalDate.parse(project_info.get(1))));
+        }
+    }
+
 }
