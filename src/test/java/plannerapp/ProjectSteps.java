@@ -1,24 +1,24 @@
 package plannerapp;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import io.cucumber.java.an.E;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.java.hu.De;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class ProjectSteps {
     private Project project;
     private LocalDate date;
     private PlannerApp planner_app;
     private ErrorMessageHolder error_message_holder;
+    private Developer developer;
 
     public ProjectSteps(PlannerApp planner_app) {
         this.planner_app = planner_app;
@@ -89,4 +89,29 @@ public class ProjectSteps {
         }
     }
 
+    @Given("the project has no manager")
+    public void the_project_has_no_manager() {
+        assertNull(this.project.getProjectManager());
+    }
+
+    @Given("there is a developer with initials {string}")
+    public void there_is_a_developer_with_initials(String initials) {
+        this.developer = new Developer(initials);
+    }
+
+    @When("the  developer is assigned as project manager")
+    public void the_developer_is_assigned_as_project_manager() {
+        this.project.setProjectManager(this.developer);
+    }
+
+    @Then("the project manager is {string}")
+    public void the_project_manager_is(String initials) {
+        assertEquals(this.project.getProjectManager().getInitials(), initials);
+    }
+
+    @And("the project already has the manager {string}")
+    public void theProjectAlreadyHasTheManager(String manager_initials) {
+        this.project.setProjectManager(new Developer(manager_initials));
+        assertEquals(this.project.getProjectManager().getInitials(), manager_initials);
+    }
 }

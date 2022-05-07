@@ -1,8 +1,8 @@
 package plannerapp;
 
-import javax.naming.OperationNotSupportedException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PlannerApp {
     ArrayList<Project> projects;
@@ -19,7 +19,7 @@ public class PlannerApp {
      * @return Array of matching projects
      */
     public Object[] searchProjectsByTitleAndDate(String title, LocalDate date) {
-        ArrayList<Project> projects_matching = new ArrayList<>();
+        List<Project> projects_matching = new ArrayList<>();
         for (Project project : this.projects) {
             if (project.getTitle().equals(title) && project.getStart_date().equals(date)) {
                 projects_matching.add(project);
@@ -28,6 +28,28 @@ public class PlannerApp {
         return projects_matching.toArray();
     }
 
+    /**
+     * Return a single project with matching ID or null
+     * @author Daniel
+     * @param id int of id for which to search
+     * @return Project with matching ID or null if no such project exists
+     */
+    public Project searchProjectsById(int id) {
+        for (Project project : this.projects) {
+            if (project.getProject_id() == id) {
+                return project;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Method for adding project to  the planner app
+     * @author Daniel
+     * @param project Project object to add
+     * @throws OperationNotAllowedException Throws exception if project starting date has expired
+     * or the project already exists in the system
+     */
     public void addProject(Project project) throws OperationNotAllowedException{
         LocalDate time_now = LocalDate.now();
         if (searchProjectsByTitleAndDate(project.getTitle(), project.getStart_date()).length >= 1) {

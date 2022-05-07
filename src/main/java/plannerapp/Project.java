@@ -10,6 +10,7 @@ public class Project {
     private final String title;
     private final int project_id;
     private final LocalDate start_date;
+    private Developer project_manager;
 
     public Project(String title, LocalDate start_date) {
         this.title = title;
@@ -34,5 +35,10 @@ public class Project {
     }
     public LocalDate getStart_date() {
         return this.start_date;
+    }
+    public Developer getProjectManager() {return this.project_manager;}
+
+    public void setProjectManager(Developer project_manager) {
+        this.project_manager = project_manager;
     }
 }
