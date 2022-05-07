@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 
 public class Project {
+    // A static integer is kept which increases by 1 every time a new project is created.
     private static int rolling_project_id = 0;
     private final String title;
     private final int project_id;
