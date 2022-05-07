@@ -2,10 +2,7 @@ package plannerapp;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
-import java.util.StringJoiner;
+import java.util.*;
 
 public class UserInterface {
     PlannerApp planner_app;
@@ -38,7 +35,11 @@ public class UserInterface {
      */
     public void printHelpMessage() {
         System.out.println("The available commands are as follows:\n" +
-                "project_add <title> <start date> (e.g. project_add \"New Project\" 2022-02-23)\n");
+                "project_add <title> <start date> (e.g. project_add New Project 2022-02-23) - add new project\n" +
+                "project_list - list all projects in the system\n" +
+                "search_id <ID> (e.g. search 22001) - display information for project with <ID>\n" +
+                "quit or exit - exit the program\n" +
+                "help or ? - display this help message\n");
     }
 
     /**
@@ -73,10 +74,23 @@ public class UserInterface {
      */
     public void listProjects() {
         System.out.println("Current projects in PlannerApp are:\n");
-        ArrayList<Project> projects = planner_app.projects;
+        List<Project> projects = planner_app.projects;
         for (Project project : projects) {
             System.out.printf("ID: %s, title: %s, scheduled starting time: %s%n",
                     project.getProject_id(), project.getTitle(), project.getStart_date());
+        }
+    }
+
+    public void searchProject(String[] command_body) {
+        if (command_body.length != 2) {
+            System.out.println("Command syntax incorrect. See help message for correct usage");
+        }
+        Project matching = this.planner_app.searchProjectsById(Integer.parseInt(command_body[1]));
+        if (matching == null) {
+            System.out.printf("No projects with id %s found%n", command_body[1]);
+        } else {
+            System.out.printf("ID: %s, title: %s, scheduled starting time: %s%n",
+                    matching.getProject_id(), matching.getTitle(), matching.getStart_date());
         }
     }
 
@@ -86,22 +100,33 @@ public class UserInterface {
      * @author Daniel
      */
     public void runMainLoop() {
-        String user_input;
+        String[] user_input;
         boolean running = true;
         System.out.println("Welcome to the \n" + welcome_message_ascii + "CLI. For help, write help or ?.\n");
 
         while (running) {
-            user_input = fetchUserInput();
-            if (user_input.equals("help") || user_input.equals("?")) {
-                printHelpMessage();
-            } else if (user_input.startsWith("project_add")) {
-                addProject(user_input.split(" "));
-            } else if (user_input.equals("project_list")) {
-                listProjects();
-            } else if (user_input.equals("quit") || user_input.equals("exit")) {
-                running = false;
-            } else {
-                System.out.println("Sorry, the input was invalid. For help, write help or ?.");
+            user_input = fetchUserInput().split(" ");
+            switch (user_input[0]) {
+                case "help":
+                case "?":
+                    printHelpMessage();
+                    break;
+                case "project_add":
+                    addProject(user_input);
+                    break;
+                case "project_list":
+                    listProjects();
+                    break;
+                case "search_id":
+                    searchProject(user_input);
+                    break;
+                case "quit":
+                case "exit":
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Sorry, the input was invalid. For help, write help or ?.");
+                    break;
             }
         }
     }
