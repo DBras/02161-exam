@@ -2,6 +2,8 @@ package plannerapp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.List;
+
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -12,6 +14,7 @@ public class ActivitySteps {
     private PlannerApp planner_app;
     private Developer developer;
     private ErrorMessageHolder error_message_holder;
+	private Object errorMessageHolder;
   
     public ActivitySteps(PlannerApp planner_app) {
     	this.planner_app = planner_app;
@@ -33,7 +36,6 @@ public class ActivitySteps {
 	            this.error_message_holder.setErrorMessage(e.getMessage());
 	        }
 	}
-
 	@Then("the devolomer with name {string} is part of the of the system")
 	public void the_devolomer_with_name_is_part_of_the_of_the_system(String initials) {
 		Developer d = planner_app.getDeveloper(initials);
@@ -41,34 +43,33 @@ public class ActivitySteps {
 	}
 	
 	
+	
+	
 	@Given("there is a developer called {string}")
-	public void there_is_a_developer_called(String string) {
-	    // Write code here that turns the phrase above into concrete actions
-	    throw new io.cucumber.java.PendingException();
+	public void there_is_a_developer_called(String initials) {
+		developer = new Developer(initials); 
 	}
-
-	@And("these developers are in the system")
-	public void these_developers_are_in_the_system(io.cucumber.datatable.DataTable dataTable) {
-	    // Write code here that turns the phrase above into concrete actions
-	    // For automatic transformation, change DataTable to one of
-	    // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-	    // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-	    // Double, Byte, Short, Long, BigInteger or BigDecimal.
-	    //
-	    // For other transformations you can register a DataTableType.
-	    throw new io.cucumber.java.PendingException();
+	
+	@And("the developer {string} is already in the system")
+	public void the_developer_is_already_in_the_system(String initials) throws OperationNotAllowedException {
+		this.planner_app.addDeveloper(new Developer(initials));
 	}
+	
 
 	@When("the developer is added to the system")
 	public void the_developer_is_added_to_the_system() {
-	    // Write code here that turns the phrase above into concrete actions
-	    throw new io.cucumber.java.PendingException();
+		
+		try {
+            planner_app.addDeveloper(developer);	
+        } catch (OperationNotAllowedException e) {
+            this.error_message_holder.setErrorMessage(e.getMessage());
+        }
+	    
 	}
 
 	@Then("The error message {string} is given")
-	public void the_error_message_is_given(String string) {
-	    // Write code here that turns the phrase above into concrete actions
-	    throw new io.cucumber.java.PendingException();
+	public void the_error_message_is_given(String errorMessage){
+		assertEquals(this.error_message_holder.getErrorMessage(), errorMessage);
 	}
 	
 }

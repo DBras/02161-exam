@@ -1,6 +1,10 @@
 package plannerapp;
 
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 
 
@@ -40,5 +44,17 @@ public class Project {
 
     public void setProjectManager(Developer project_manager) {
         this.project_manager = project_manager;
+    }
+    public void createReport() throws IOException {
+
+        File file = new File(this.title + ".txt");
+        FileWriter fw = new FileWriter(file);
+        PrintWriter pw = new PrintWriter(fw);
+
+          pw.print("Developers");
+          pw.print("Date");
+          pw.print("Activity/ pending activity");
+
+          pw.close();
     }
 }

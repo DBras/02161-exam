@@ -8,14 +8,13 @@ Feature: Add development employee (Johannes)
 	 When the developer called "Lars" is added to the system
 	 Then the devolomer with name "Lars" is part of the of the system
 
-	 #Scenario: add an existing developer succesfully
-	 #Given there is a developer called "JBN"
-	 #And these developers are in the system
-		#		| JBN |
-    #    | HB  |
-    #    | EIB |
-    #    | SDN |
-   #When the developer is added to the system
-   #Then The error message "Developer already exist in the system" is given
-		        
+	 
+	 Scenario: add an existing developer succesfully
+	 Given there is a developer called "JBN"
+	 And the developer "JBN" is already in the system
+	 When the developer is added to the system
+   Then The error message "Developer is already registered in the system" is given
+		     
+		
+				        
 	 
