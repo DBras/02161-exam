@@ -45,6 +45,9 @@ public class UserInterface {
                 "search_id <ID> (e.g. search_id 22001) - display information for project with <ID>\n" +
                 "developer_add <initials> (e.g. developer_add Huba) - add new developer to the system\n" +
                 "assign_manager <project_id> <manager_initials> (e.g. assign_manager 22001 Huba) - assign project manager\n" +
+                "project_change_date <project id> <start date> (e.g. project_change_date 22001 2022-06-29) - change project start date\n" +
+                "activity_add <project_id> <activity_name> <start date> " +
+                            "(e.g. activity_add 22001 write_methods 2022-06-29) - add activity to a project\n" +
                 "quit or exit - exit the program\n" +
                 "help or ? - display this help message\n");
     }
@@ -165,6 +168,59 @@ public class UserInterface {
     }
 
     /**
+     * Method for changing project starting date
+     * @param command_body String array of user command
+     */
+    public void changeProjectStartDate(String[] command_body) {
+        if (command_body.length != 3) {
+            System.out.println(syntax_error_message);
+        } else {
+            try {
+                LocalDate start_date = LocalDate.parse(command_body[2]),
+                        time_now = LocalDate.now();
+                int project_id = Integer.parseInt(command_body[1]);
+                Project project = this.planner_app.searchProjectsById(project_id);
+                if (time_now.isAfter(start_date) || project == null) {
+                    System.out.println("Command could not be completed. Please verify your input");
+                } else {
+                    project.setStartDate(start_date);
+                    System.out.printf("Starting date of project %s changed to %s%n",
+                            project.getTitle(), project.getStartDate());
+                }
+            } catch (DateTimeParseException e) {
+                System.out.println("Date was not formatted correctly");
+            } catch (NumberFormatException e) {
+                System.out.println("Project ID was not formatted correctly");
+            }
+        }
+    }
+
+    /**
+     * Method for adding an activity to a project
+     * @param command_body String array of user command
+     */
+    public void addActivity(String[] command_body) {
+        if (command_body.length != 4) {
+            System.out.println(syntax_error_message);
+        } else {
+            try {
+                int project_id = Integer.parseInt(command_body[1]);
+                Project project = this.planner_app.searchProjectsById(project_id);
+                String activity_name = command_body[2];
+                LocalDate start_date = LocalDate.parse(command_body[3]);
+                Activity activity = new Activity(activity_name, start_date);
+                project.addActivity(activity);
+            } catch (OperationNotAllowedException e) {
+                System.out.println("Activity could not be added. Please verify your input");
+            } catch (NumberFormatException e) {
+                System.out.println("Project ID was not formatted correctly");
+            } catch (DateTimeParseException e) {
+                System.out.println("Date was not formatted correctly");
+            }
+        }
+    }
+
+    /**
      * Method for running the main CLI loop. Should be called to run the user interface. Relies on other methods for
      * functionality to increase code readability.
      * @author Daniel
@@ -195,6 +251,12 @@ public class UserInterface {
                     break;
                 case "developer_add":
                     addDeveloper(user_input);
+                    break;
+                case "project_change_date":
+                    changeProjectStartDate(user_input);
+                    break;
+                case "activity_add":
+                    addActivity(user_input);
                     break;
                 case "quit":
                 case "exit":

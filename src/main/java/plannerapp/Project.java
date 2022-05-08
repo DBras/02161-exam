@@ -18,7 +18,7 @@ public class Project {
     private static int rolling_project_id = 0;
     private final String title;
     private final int project_id;
-    private final LocalDate start_date;
+    private LocalDate start_date;
     private Developer project_manager;
     private List<Activity> activities;
 
@@ -91,6 +91,14 @@ public class Project {
      */
     public void setProjectManager(Developer project_manager) {
         this.project_manager = project_manager;
+    }
+
+    /**
+     * Setter method for changing project start date
+     * @param start_date LocalDate representing new start date
+     */
+    public void setStartDate(LocalDate start_date) {
+        this.start_date = start_date;
     }
     
     public void addActivity(Activity activity) throws OperationNotAllowedException{
