@@ -84,6 +84,10 @@ public class Project {
      */
     public Developer getProjectManager() {return this.project_manager;}
 
+    public List<Activity> getActivities() {
+        return this.activities;
+    }
+
     /**
      * Project manager setter
      * @author Daniel

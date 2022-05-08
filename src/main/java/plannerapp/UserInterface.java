@@ -114,6 +114,10 @@ public class UserInterface {
                 System.out.printf("ID: %s, title: %s, scheduled starting time: %s, manager: %s%n",
                         matching.getProjectID(), matching.getTitle(), matching.getStartDate(),
                         manager_string);
+                System.out.println("Project contains the following activities:");
+                for (Activity activity : matching.getActivities()) {
+                    System.out.printf("%s starting %s%n", activity.getName(), activity.getStartDate());
+                }
             }
         }
     }
