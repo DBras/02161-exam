@@ -29,7 +29,7 @@ public class PlannerApp {
     public Object[] searchProjectsByTitleAndDate(String title, LocalDate date) {
         List<Project> projects_matching = new ArrayList<>();
         for (Project project : this.projects) {
-            if (project.getTitle().equals(title) && project.getStart_date().equals(date)) {
+            if (project.getTitle().equals(title) && project.getStartDate().equals(date)) {
                 projects_matching.add(project);
             }
         }
@@ -44,7 +44,7 @@ public class PlannerApp {
      */
     public Project searchProjectsById(int id) {
         for (Project project : this.projects) {
-            if (project.getProject_id() == id) {
+            if (project.getProjectID() == id) {
                 return project;
             }
         }
@@ -73,9 +73,9 @@ public class PlannerApp {
      */
     public void addProject(Project project) throws OperationNotAllowedException{
         LocalDate time_now = LocalDate.now();
-        if (searchProjectsByTitleAndDate(project.getTitle(), project.getStart_date()).length >= 1) {
+        if (searchProjectsByTitleAndDate(project.getTitle(), project.getStartDate()).length >= 1) {
             throw new OperationNotAllowedException("Project already exists in the system");
-        } else if (time_now.isAfter(project.getStart_date())) {
+        } else if (time_now.isAfter(project.getStartDate())) {
             throw new OperationNotAllowedException("Project starting date has expired");
         }
         this.projects.add(project);

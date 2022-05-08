@@ -4,6 +4,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
+/**
+ * Class containing user interface methods
+ * @author Daniel
+ */
 public class UserInterface {
     PlannerApp planner_app;
     Scanner console;
@@ -61,7 +65,7 @@ public class UserInterface {
             LocalDate starting_date = LocalDate.parse(command_body[date_placement]);
             Project project = new Project(project_title.toString(), starting_date);
             planner_app.addProject(project);
-            System.out.printf("Project \"%s\" added with ID %s%n", project.getTitle(), project.getProject_id());
+            System.out.printf("Project \"%s\" added with ID %s%n", project.getTitle(), project.getProjectID());
         } catch (OperationNotAllowedException e) {
             System.out.println(e.getMessage());
         } catch (DateTimeParseException e) {
@@ -72,7 +76,7 @@ public class UserInterface {
     }
 
     /**
-     * Method for listing all projects in the system, decoupled from the main loop.
+     * Method for listing all projects in the system, Decoupled from the main loop.
      * @author Daniel
      */
     public void listProjects() {
@@ -80,10 +84,15 @@ public class UserInterface {
         List<Project> projects = planner_app.projects;
         for (Project project : projects) {
             System.out.printf("ID: %s, title: %s, scheduled starting time: %s%n",
-                    project.getProject_id(), project.getTitle(), project.getStart_date());
+                    project.getProjectID(), project.getTitle(), project.getStartDate());
         }
     }
 
+    /**
+     * Method for searching for projects using project ID.
+     * @author Daniel
+     * @param command_body String array of commmand used by user
+     */
     public void searchProject(String[] command_body) {
         if (command_body.length != 2) {
             System.out.println(syntax_error_message);
@@ -100,12 +109,17 @@ public class UserInterface {
                     manager_string = manager.getInitials();
                 }
                 System.out.printf("ID: %s, title: %s, scheduled starting time: %s, manager: %s%n",
-                        matching.getProject_id(), matching.getTitle(), matching.getStart_date(),
+                        matching.getProjectID(), matching.getTitle(), matching.getStartDate(),
                         manager_string);
             }
         }
     }
 
+    /**
+     * Method for assigning project manager.
+     * @author Daniel
+     * @param command_body String array of command used by user
+     */
     public void assignManager(String[] command_body) {
         if (command_body.length != 3) {
             System.out.println(syntax_error_message);
@@ -128,6 +142,11 @@ public class UserInterface {
         }
     }
 
+    /**
+     * Method for adding a developer to the system.
+     * @author Daniel
+     * @param command_body String array of command used by user
+     */
     public void addDeveloper(String[] command_body) {
         if (command_body.length != 2) {
             System.out.println(syntax_error_message);

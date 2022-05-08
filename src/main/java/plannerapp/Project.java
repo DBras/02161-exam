@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * Class representing a project with name, ID, start date, manager, and activities.
+ */
 public class Project {
     // A static integer is kept which increases by 1 every time a new project is created.
     private static int rolling_project_id = 0;
@@ -25,6 +28,11 @@ public class Project {
         this.project_id = nextProjectID(start_date);
         this.activities = new ArrayList<>();
     }
+    /**
+     * Project constructor from starting date
+     * @author Daniel
+     * @param start_date LocalDate of starting date
+     */
     public Project(LocalDate start_date) {
         this.title = "";
         this.start_date = start_date;
@@ -32,21 +40,55 @@ public class Project {
         this.activities = new ArrayList<>();
     }
 
+    /**
+     * Method for creating next project id which is the year and a rolling ID.
+     * @author Daniel
+     * @param start_date LocalDate of project starting date - used to specify year
+     * @return Integer of next ID
+     */
     public int nextProjectID(LocalDate start_date) {
         return (start_date.getYear() % 1000) * 1000 + (++rolling_project_id);
     }
 
+    /**
+     * Project title getter
+     * @author Daniel
+     * @return String of project title
+     */
     public String getTitle() {
         return this.title;
     }
-    public int getProject_id() {
+
+    /**
+     * Project ID getter
+     * @author Daniel
+     * @return Integer of project ID
+     */
+    public int getProjectID() {
         return this.project_id;
     }
-    public LocalDate getStart_date() {
+
+    /**
+     * Starting date getter
+     * @author Daniel
+     * @return LocalDate of project starting date
+     */
+    public LocalDate getStartDate() {
         return this.start_date;
     }
+
+    /**
+     * Project Manager getter
+     * @author Daniel
+     * @return Developer object representing project manager
+     */
     public Developer getProjectManager() {return this.project_manager;}
 
+    /**
+     * Project manager setter
+     * @author Daniel
+     * @param project_manager Developer representing project manager
+     */
     public void setProjectManager(Developer project_manager) {
         this.project_manager = project_manager;
     }
