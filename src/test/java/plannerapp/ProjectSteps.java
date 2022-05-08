@@ -28,6 +28,7 @@ public class ProjectSteps {
     @Given("that there is a project with title {string} and starting date {string}")
     public void that_there_is_a_project_with_title_and_starting_date(String title, String start_date_string) {
         date = LocalDate.parse(start_date_string);
+        
         project = new Project(title, date);
         assertTrue(project.getTitle().equals(title)
                 && project.getStart_date().toString().equals(start_date_string));

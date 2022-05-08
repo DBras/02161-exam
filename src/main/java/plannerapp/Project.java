@@ -6,6 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Project {
@@ -15,16 +17,19 @@ public class Project {
     private final int project_id;
     private final LocalDate start_date;
     private Developer project_manager;
+    private List<Activity> activities;
 
     public Project(String title, LocalDate start_date) {
         this.title = title;
         this.start_date = start_date;
         this.project_id = nextProjectID(start_date);
+        this.activities = new ArrayList<>();
     }
     public Project(LocalDate start_date) {
         this.title = "";
         this.start_date = start_date;
         this.project_id = nextProjectID(start_date);
+        this.activities = new ArrayList<>();
     }
 
     public int nextProjectID(LocalDate start_date) {
@@ -45,6 +50,26 @@ public class Project {
     public void setProjectManager(Developer project_manager) {
         this.project_manager = project_manager;
     }
+    
+    public void addActivity(Activity activity) throws OperationNotAllowedException{
+    	for (Activity a : this.activities) {
+    		if (a.getName().equals(activity.getName())) {
+    			throw new OperationNotAllowedException("This activity already exists");
+    		}
+    	}
+    	this.activities.add(activity);
+    }
+    
+    public Object[] searchActivitiesByTitleAndDate(String activityTitle, LocalDate start_date) {
+        List<Activity> activity_matching = new ArrayList<>();
+        for (Activity activity : this.activities) {
+            if (activity.getName().equals(activityTitle) && activity.getStartDate().equals(start_date)) {
+                activity_matching.add(activity);
+            }
+        }
+        return activity_matching.toArray();
+    }
+    
     public void createReport() throws IOException {
 
         File file = new File(this.title + ".txt");

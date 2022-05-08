@@ -7,14 +7,18 @@ import java.util.List;
 public class PlannerApp {
     ArrayList<Project> projects;
     List<Developer> developers;
+    ArrayList<Activity> activities;
 
     
     public PlannerApp() {
         this.projects = new ArrayList<>();
         this.developers = new ArrayList<>();
+        this.activities = new ArrayList<>();
    
     }
 
+   
+    
     /**
      * Returns list of projects that match given title and date
      * @author Daniel
@@ -46,6 +50,10 @@ public class PlannerApp {
         }
         return null;
     }
+    
+    
+    
+    
     
     public Developer getDeveloper(String initials) {
     	for (Developer dev : this.developers) {
@@ -81,4 +89,22 @@ public class PlannerApp {
     	}
     	this.developers.add(developer);
     }
+    
+    public void addActivity(Activity activity) throws OperationNotAllowedException{
+
+        if  (this.activities.contains(activity)) {
+            throw new OperationNotAllowedException("Activity is already registered in the project");
+        }
+         this.activities.add(activity);
+    }
+
+    public Activity getActivity(String activityTitle) {
+        for (Activity act : this.activities) {
+            if (act.getName().equals(activityTitle)) {return act;}
+
+        }
+        return null;
+    }
+    
+    
 }
