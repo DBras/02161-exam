@@ -6,9 +6,11 @@ import java.util.List;
 
 public class PlannerApp {
     ArrayList<Project> projects;
+    List<Developer> developers;
 
     public PlannerApp() {
         this.projects = new ArrayList<>();
+        this.developers = new ArrayList<>();
     }
 
     /**
@@ -42,6 +44,13 @@ public class PlannerApp {
         }
         return null;
     }
+    
+    public Developer getDeveloper(String initials) {
+    	for (Developer dev : this.developers) {
+    		if (dev.getInitials().equals(initials)) {return dev;}
+    	}
+    	return null;
+    }
 
     /**
      * Method for adding project to  the planner app
@@ -58,5 +67,12 @@ public class PlannerApp {
             throw new OperationNotAllowedException("Project starting date has expired");
         }
         this.projects.add(project);
+    }
+    
+    public void addDeveloper(Developer developer) throws OperationNotAllowedException{
+    	if  (this.developers.contains(developer)) {
+    		throw new OperationNotAllowedException("Developer is already registered in the system");
+    	}
+    	this.developers.add(developer);
     }
 }
