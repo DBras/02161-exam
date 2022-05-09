@@ -32,14 +32,14 @@ public class PlannerApp {
      * @return Array of matching projects
      */
     public List<Project> searchProjectsByTitleAndDate(String title, LocalDate date) {
-        assert title != null && date != null;
+        assert title != null && date != null : "Precondition";
         List<Project> projects_matching = new ArrayList<>();
         for (Project project : this.projects) {                                                 // 1
             if (project.getTitle().equals(title) && project.getStartDate().equals(date)) {      // 2
                 projects_matching.add(project);                                                 // 3
             }
         }
-        assert allMatch(projects_matching, title, date);
+        assert allMatch(projects_matching, title, date) : "Post-condition";
         return projects_matching;
     }
 
@@ -95,14 +95,14 @@ public class PlannerApp {
      */
     public void addProject(Project project) throws OperationNotAllowedException{
         LocalDate time_now = LocalDate.now();
-        assert project.getTitle() != null && project.getStartDate() != null: "Precondition";
+        assert project.getTitle() != null && project.getStartDate() != null : "Pre-condition";
         if (searchProjectsByTitleAndDate(project.getTitle(), project.getStartDate()).size() >= 1) {
             throw new OperationNotAllowedException("Project already exists in the system");
         } else if (time_now.isAfter(project.getStartDate())) {
             throw new OperationNotAllowedException("Project starting date has expired");
         }
-        assert project != null : "Postcondition";
         this.projects.add(project);
+        assert this.projects.contains(project) : "Post-condition";
     }
 
     /**
@@ -112,11 +112,13 @@ public class PlannerApp {
      * @throws OperationNotAllowedException Throws exception if developer already exists in the system
      */
     public void addDeveloper(Developer developer) throws OperationNotAllowedException{
+        assert developer.getInitials() != null : "Pre-condition";
     	for (Developer dev : this.developers) {
     		if (dev.getInitials().equals(developer.getInitials())) {
     			throw new OperationNotAllowedException("Developer is already registered in the system");
     		}
     	}
     	this.developers.add(developer);
+        assert this.developers.contains(developer) : "Post-condition";
     }
 }

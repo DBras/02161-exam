@@ -7,3 +7,7 @@ de White-Box tests, vi har implementeret og beskrevet i rapporten.
 
 For at køre programmets user interface, køres filen Main.java. Denne inhdeholder _main_-metoden, som laver et nyt User
 Interface. Dette interface køres blot i konsollen. For hjælp i interfacet kan man blot skrive "help" eller "?".
+
+Link til GitHub:
+
+https://github.com/DBras/02161-exam

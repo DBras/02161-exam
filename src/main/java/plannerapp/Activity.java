@@ -52,6 +52,7 @@ public class Activity {
      * @throws OperationNotAllowedException Throws exception if activity date has expired
      */
     public void changeActivityDate(int year, int start_week, int end_week) throws OperationNotAllowedException{
+        assert year != 0 && start_week != 0 && end_week != 0 : "Pre-condition";
         LocalDate time_now = LocalDate.now();
         int current_week_of_year = time_now.get(WeekFields.of(Locale.ENGLISH).weekOfYear());
         if (year < time_now.getYear()
@@ -61,6 +62,7 @@ public class Activity {
         this.year = year;
         this.start_week = start_week;
         this.end_week = end_week;
+        assert this.year == year && this.start_week == start_week && this.end_week == end_week;
     }
 
     /**
