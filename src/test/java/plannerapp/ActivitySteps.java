@@ -1,11 +1,13 @@
 package plannerapp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.cucumber.java.bs.A;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -120,7 +122,27 @@ public class ActivitySteps {
         Object[] activity = this.project.searchActivitiesByTitleAndDate(activityTitle, date);
         assertEquals(1, activity.length);
 	}
-	
-	
-	
+
+	@When("the activity is changed to {string} and date {string}")
+	public void theActivityIsChangedToAndDate(String name, String start_date_string) {
+		LocalDate start_date = LocalDate.parse(start_date_string);
+		try {
+			this.activity.changeStartDate(start_date);
+			this.activity.setName(name);
+		} catch (OperationNotAllowedException e) {
+			this.error_message_holder.setErrorMessage(e.getMessage());
+		}
+	}
+
+	@Then("the activity has name {string} and date {string}")
+	public void theActivityHasNameAndDate(String name, String start_date_string) {
+		LocalDate start_date = LocalDate.parse(start_date_string);
+		assertTrue(this.activity.getName().equals(name) && this.activity.getStartDate().equals(start_date));
+	}
+
+	@Given("that there is an activity with name {string} and start date {string}")
+	public void thatThereIsAnActivityWithNameAndStartDate(String name, String start_date_string) {
+		LocalDate start_date = LocalDate.parse(start_date_string);
+		this.activity = new Activity(name, start_date);
+	}
 }
