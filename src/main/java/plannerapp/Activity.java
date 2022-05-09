@@ -17,12 +17,10 @@ public class Activity {
      * @param start_week Int of start week
      * @param end_week Int of end week
      */
-    public Activity(String activityTitle, int expected_time, int year, int start_week, int end_week) {
+    public Activity(String activityTitle, int expected_time, int year, int start_week, int end_week) throws OperationNotAllowedException {
         this.activityTitle = activityTitle;
         this.expected_time = expected_time;
-        this.year = year;
-        this.start_week = start_week;
-        this.end_week = end_week;
+        this.changeActivityDate(year, start_week, end_week);
     }
 
 
@@ -51,7 +49,7 @@ public class Activity {
      * @param year Year to change to
      * @param start_week Start week to change to
      * @param end_week End week to change to
-     * @throws OperationNotAllowedException
+     * @throws OperationNotAllowedException Throws exception if activity date has expired
      */
     public void changeActivityDate(int year, int start_week, int end_week) throws OperationNotAllowedException{
         LocalDate time_now = LocalDate.now();

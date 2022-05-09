@@ -25,23 +25,21 @@ public class PlannerApp {
 
     /**
      * Returns list of projects that match given title and date
-     * Design-by-contract by Daniel
      * @author Daniel
      * @param title Title of project
      * @param date Date of project
      * @return Array of matching projects
      */
-    public Object[] searchProjectsByTitleAndDate(String title, LocalDate date) {
-        assert title != null && date != null : "Precondition";
+    public List<Project> searchProjectsByTitleAndDate(String title, LocalDate date) {
+        assert title != null && date != null;
         List<Project> projects_matching = new ArrayList<>();
-        for (Project project : this.projects) {
-            if (project.getTitle().equals(title) && project.getStartDate().equals(date)) {
-                projects_matching.add(project);
+        for (Project project : this.projects) {                                                 // 1
+            if (project.getTitle().equals(title) && project.getStartDate().equals(date)) {      // 2
+                projects_matching.add(project);                                                 // 3
             }
         }
-        assert allMatch(projects_matching, title, date) || projects_matching.size() == 0 : "Postcondition";
-        return projects_matching.toArray();
-
+        assert(allMatch(projects, title, date));
+        return projects_matching;
     }
 
     /**
@@ -76,7 +74,7 @@ public class PlannerApp {
      * Method for getting developer
      * @author Johannes
      * @param initials String of developer initials
-     * @return
+     * @return Developer with matching initials
      */
     public Developer getDeveloper(String initials) {
     	for (Developer dev : this.developers) {
@@ -97,7 +95,7 @@ public class PlannerApp {
     public void addProject(Project project) throws OperationNotAllowedException{
         LocalDate time_now = LocalDate.now();
         assert project.getTitle() != null && project.getStartDate() != null: "Precondition";
-        if (searchProjectsByTitleAndDate(project.getTitle(), project.getStartDate()).length >= 1) {
+        if (searchProjectsByTitleAndDate(project.getTitle(), project.getStartDate()).size() >= 1) {
             throw new OperationNotAllowedException("Project already exists in the system");
         } else if (time_now.isAfter(project.getStartDate())) {
             throw new OperationNotAllowedException("Project starting date has expired");
@@ -110,7 +108,7 @@ public class PlannerApp {
      * Method for adding developer to the system
      * @author Johannes
      * @param developer Developer object
-     * @throws OperationNotAllowedException
+     * @throws OperationNotAllowedException Throws exception if developer already exists in the system
      */
     public void addDeveloper(Developer developer) throws OperationNotAllowedException{
     	for (Developer dev : this.developers) {

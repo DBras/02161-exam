@@ -52,8 +52,8 @@ public class ProjectSteps {
     @Then("a project with title {string} and starting date {string} is contained in the system")
     public void a_project_with_title_and_starting_date_is_in_the_system(String title, String start_date_string) {
         LocalDate date = LocalDate.parse(start_date_string);
-        Object[] projects = planner_app.searchProjectsByTitleAndDate(title, date);
-        assertEquals(1, projects.length);
+        List<Project> projects = planner_app.searchProjectsByTitleAndDate(title, date);
+        assertEquals(1, projects.size());
     }
 
     // Daniel
@@ -80,8 +80,8 @@ public class ProjectSteps {
     @Then("there is a new project with no name and starting date {string} in the system")
     public void there_is_a_new_project_with_no_name_and_starting_date_in_the_system(String start_date_string) {
         LocalDate date = LocalDate.parse(start_date_string);
-        Object[] projects = planner_app.searchProjectsByTitleAndDate("", date);
-        assertEquals(1, projects.length);
+        List<Project> projects = planner_app.searchProjectsByTitleAndDate("", date);
+        assertEquals(1, projects.size());
     }
 
     // Daniel

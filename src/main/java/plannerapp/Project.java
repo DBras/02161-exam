@@ -99,13 +99,8 @@ public class Project {
 
     /**
      * Setter method for changing project start date
-     * @param start_date LocalDate representing new start date
-     */
-
-    /**
-     * Setter method for start date
      * @author Daniel
-     * @param start_date
+     * @param start_date LocalDate representing new start date
      */
     public void setStartDate(LocalDate start_date) {
         this.start_date = start_date;
@@ -115,7 +110,7 @@ public class Project {
      * Method for adding activity to the project
      * @author Johannes
      * @param activity Activity object
-     * @throws OperationNotAllowedException
+     * @throws OperationNotAllowedException Throws exception if activity already exists
      */
     public void addActivity(Activity activity) throws OperationNotAllowedException{
     	for (Activity a : this.activities) {
@@ -146,7 +141,7 @@ public class Project {
     /**
      * Method for creating report in .txt format
      * @author Jonathan
-     * @throws IOException
+     * @throws IOException Throws exception if error occurs during writing
      */
     public void createReport() throws IOException {
 

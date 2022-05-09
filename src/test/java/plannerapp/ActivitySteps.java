@@ -106,7 +106,11 @@ public class ActivitySteps {
 	@And("there is a new activity with the title {string}, expected time {int}, start year {int}, start week {int}, and end week {int}")
 	public void thereIsANewActivityWithTheTitleStartYearStartWeekAndEndWeek(String activityTitle, int expected_hours,
 																			int year, int start_week, int end_week) {
-		activity = new Activity(activityTitle, expected_hours, year, start_week, end_week);
+		try {
+			activity = new Activity(activityTitle, expected_hours, year, start_week, end_week);
+		} catch (OperationNotAllowedException e) {
+			this.error_message_holder.setErrorMessage(e.getMessage());
+		}
 	}
 
 	@When("the activity is added to the project")

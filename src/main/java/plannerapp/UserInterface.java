@@ -76,7 +76,7 @@ public class UserInterface {
         } catch (DateTimeParseException e) {
             System.out.println(Arrays.toString(command_body));
             System.out.println(project_title);
-            System.out.println("An error occurred during date parsing. Make sure it is formatted as YYYY-dd-mm");
+            System.out.println("An error occurred during date parsing. Make sure it is formatted as YYYY-mm-dd");
         }
     }
 
@@ -234,6 +234,10 @@ public class UserInterface {
         }
     }
 
+    /**
+     * Method for creating report from a project
+     * @param command_body String array of user command
+     */
     public void createReport(String[] command_body) {
         if (command_body.length != 2) {
             System.out.println(syntax_error_message);
@@ -241,7 +245,7 @@ public class UserInterface {
             try {
                 int project_id = Integer.parseInt(command_body[1]);
                 Project project = this.planner_app.searchProjectsById(project_id);
-                if (project != null) {
+                if (project == null) {
                     System.out.println("No project with that ID found");
                 } else {
                     project.createReport();

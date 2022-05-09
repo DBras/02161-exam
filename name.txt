@@ -1,1 +1,4 @@
-DevelopersDateActivity/ pending activity
+name
+2028-06-05
+
+Activities in the project:
