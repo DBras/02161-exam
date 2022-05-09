@@ -25,6 +25,7 @@ public class PlannerApp {
 
     /**
      * Returns list of projects that match given title and date
+     * Design-by-contract by Daniel
      * @author Daniel
      * @param title Title of project
      * @param date Date of project
@@ -38,7 +39,7 @@ public class PlannerApp {
                 projects_matching.add(project);                                                 // 3
             }
         }
-        assert(allMatch(projects, title, date));
+        assert allMatch(projects_matching, title, date);
         return projects_matching;
     }
 
