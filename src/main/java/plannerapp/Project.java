@@ -114,10 +114,10 @@ public class Project {
     	this.activities.add(activity);
     }
     
-    public Object[] searchActivitiesByTitleAndDate(String activityTitle, LocalDate start_date) {
+    public Object[] searchActivitiesByTitleAndStartYear(String activityTitle, int year) {
         List<Activity> activity_matching = new ArrayList<>();
         for (Activity activity : this.activities) {
-            if (activity.getName().equals(activityTitle) && activity.getStartDate().equals(start_date)) {
+            if (activity.getName().equals(activityTitle) && activity.getYear() == year) {
                 activity_matching.add(activity);
             }
         }

@@ -4,11 +4,11 @@ Feature: Modify Activity
   Actors: Project manager
 
   Scenario: Modification successful
-    Given that there is an activity with name "New Project" and start date "2022-06-05"
-    When the activity is changed to "software_engineering" and date "2022-08-20"
-    Then the activity has name "software_engineering" and date "2022-08-20"
+    And there is a new activity with the title "New Project", expected time 10, start year 2022, start week 35, and end week 42
+    When the activity is changed to "software_engineering", start year 2023, start week 15, and end week 17
+    Then the activity has name "software_engineering", start year 2023, start week 15, and end week 17
     
   Scenario: New date is in the past
-    Given that there is an activity with name "New Project" and start date "2022-06-05"
-    When the activity is changed to "software_engineering" and date "2022-04-20"
+    And there is a new activity with the title "New Project", expected time 10, start year 2022, start week 35, and end week 42
+    When the activity is changed to "software_engineering", start year 2021, start week 15, and end week 17
     Then The error message "Activity starting date is expired" is given

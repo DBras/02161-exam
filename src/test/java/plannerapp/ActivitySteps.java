@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.cucumber.java.bs.A;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -100,13 +99,13 @@ public class ActivitySteps {
 	    throw new io.cucumber.java.PendingException();
 	}
 
-	@And("there is a new activity with the title {string}, start {string}")
-	public void there_is_a_new_activity_with_the_title(String activityTitle, String start_date) {
-	        activitydate = LocalDate.parse(start_date);//start dato
-	        activity = new Activity(activityTitle, activitydate); //lav activity med arguments, navn, dato
+	@And("there is a new activity with the title {string}, expected time {int}, start year {int}, start week {int}, and end week {int}")
+	public void thereIsANewActivityWithTheTitleStartYearStartWeekAndEndWeek(String activityTitle, int expected_hours,
+																			int year, int start_week, int end_week) {
+		activity = new Activity(activityTitle, expected_hours, year, start_week, end_week);
 	}
 
-	@When("the activity is added to the projekt")
+	@When("the activity is added to the project")
 	public void the_activity_is_added_to_the_projekt() {
 		try {
 			this.project.addActivity(this.activity);
@@ -116,33 +115,34 @@ public class ActivitySteps {
 		
 	}
 
-	@Then("the activity with title {string}, start {string} is contained in the projekt")
-	public void the_activity_with_title_start_is_contained_in_the_projekt(String activityTitle, String start_date) {
-		LocalDate date = LocalDate.parse(start_date);
-        Object[] activity = this.project.searchActivitiesByTitleAndDate(activityTitle, date);
-        assertEquals(1, activity.length);
+	@Then("the activity with title {string}, expected time {int}, start year {int}, start week {int}, and end week {int} is contained in the project")
+	public void theActivityWithTitleExpectedTimeStartYearStartWeekAndEndWeekIsContainedInTheProject(
+			String activityTitle, int expected_hours, int year, int start_week, int end_week) {
+		Object[] activities = this.project.searchActivitiesByTitleAndStartYear(activityTitle, year);
+		assertEquals(1, activities.length);
+		Activity activity = (Activity) activities[0];
+		assertTrue(activity.getExpectedTime() == expected_hours
+			&& activity.getYear() == year
+			&& activity.getStartWeek() == start_week
+			&& activity.getEndWeek() == end_week);
 	}
 
-	@When("the activity is changed to {string} and date {string}")
-	public void theActivityIsChangedToAndDate(String name, String start_date_string) {
-		LocalDate start_date = LocalDate.parse(start_date_string);
+	@When("the activity is changed to {string}, start year {int}, start week {int}, and end week {int}")
+	public void theActivityIsChangedToStartYearStartWeekAndEndWeek(String name,
+																   int year, int start_week, int end_week) {
 		try {
-			this.activity.changeStartDate(start_date);
+			this.activity.changeStartDate(year, start_week, end_week);
 			this.activity.setName(name);
 		} catch (OperationNotAllowedException e) {
 			this.error_message_holder.setErrorMessage(e.getMessage());
 		}
 	}
 
-	@Then("the activity has name {string} and date {string}")
-	public void theActivityHasNameAndDate(String name, String start_date_string) {
-		LocalDate start_date = LocalDate.parse(start_date_string);
-		assertTrue(this.activity.getName().equals(name) && this.activity.getStartDate().equals(start_date));
-	}
-
-	@Given("that there is an activity with name {string} and start date {string}")
-	public void thatThereIsAnActivityWithNameAndStartDate(String name, String start_date_string) {
-		LocalDate start_date = LocalDate.parse(start_date_string);
-		this.activity = new Activity(name, start_date);
+	@Then("the activity has name {string}, start year {int}, start week {int}, and end week {int}")
+	public void theActivityHasNameStartYearStartWeekAndEndWeek(String name, int year, int start_week, int end_week) {
+		assertTrue(this.activity.getName().equals(name)
+			&& this.activity.getYear() == year
+			&& this.activity.getStartWeek() == start_week
+			&& this.activity.getEndWeek() == end_week);
 	}
 }
