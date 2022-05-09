@@ -2,14 +2,20 @@ package plannerapp;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class PlannerApp {
     ArrayList<Project> projects;
     List<Developer> developers;
     ArrayList<Activity> activities;
 
-    
+
+    /**
+     * Class constructor with no arguments
+     * @author Johannes
+     */
     public PlannerApp() {
         this.projects = new ArrayList<>();
         this.developers = new ArrayList<>();
@@ -17,23 +23,38 @@ public class PlannerApp {
    
     }
 
-   
-    
     /**
      * Returns list of projects that match given title and date
+     * Design-by-contract by Daniel
      * @author Daniel
      * @param title Title of project
      * @param date Date of project
      * @return Array of matching projects
      */
     public Object[] searchProjectsByTitleAndDate(String title, LocalDate date) {
+        assert title != null && date != null : "Precondition";
         List<Project> projects_matching = new ArrayList<>();
         for (Project project : this.projects) {
             if (project.getTitle().equals(title) && project.getStartDate().equals(date)) {
                 projects_matching.add(project);
             }
         }
+        assert allMatch(projects_matching, title, date) || projects_matching.size() == 0 : "Postcondition";
         return projects_matching.toArray();
+
+    }
+
+    /**
+     * Method for checking post-condition of above method. Returns true if all projects have matching date and title
+     * @author Daniel
+     * @param projects List object of projects to test on
+     * @param title String of title to check
+     * @param date String of date to check
+     * @return boolean: true if all match, false if they do not
+     */
+    public boolean allMatch(List<Project> projects, String title, LocalDate date) {
+        return projects.stream()
+                .allMatch(p -> p.getTitle().equals(title) && p.getStartDate().equals(date));
     }
 
     /**
@@ -50,11 +71,13 @@ public class PlannerApp {
         }
         return null;
     }
-    
-    
-    
-    
-    
+
+    /**
+     * Method for getting developer
+     * @author Johannes
+     * @param initials String of developer initials
+     * @return
+     */
     public Developer getDeveloper(String initials) {
     	for (Developer dev : this.developers) {
     		if (dev.getInitials().equals(initials))
@@ -65,7 +88,7 @@ public class PlannerApp {
     }
    
     /**
-     * Method for adding project to  the planner app
+     * Method for adding project to  the planner app - design by contract by Samuel.
      * @author Daniel
      * @param project Project object to add
      * @throws OperationNotAllowedException Throws exception if project starting date has expired
@@ -73,14 +96,22 @@ public class PlannerApp {
      */
     public void addProject(Project project) throws OperationNotAllowedException{
         LocalDate time_now = LocalDate.now();
+        assert project.getTitle() != null && project.getStartDate() != null: "Precondition";
         if (searchProjectsByTitleAndDate(project.getTitle(), project.getStartDate()).length >= 1) {
             throw new OperationNotAllowedException("Project already exists in the system");
         } else if (time_now.isAfter(project.getStartDate())) {
             throw new OperationNotAllowedException("Project starting date has expired");
         }
+        assert project != null : "Postcondition";
         this.projects.add(project);
     }
-    
+
+    /**
+     * Method for adding developer to the system
+     * @author Johannes
+     * @param developer Developer object
+     * @throws OperationNotAllowedException
+     */
     public void addDeveloper(Developer developer) throws OperationNotAllowedException{
     	for (Developer dev : this.developers) {
     		if (dev.getInitials().equals(developer.getInitials())) {
@@ -89,22 +120,4 @@ public class PlannerApp {
     	}
     	this.developers.add(developer);
     }
-    
-    public void addActivity(Activity activity) throws OperationNotAllowedException{
-
-        if  (this.activities.contains(activity)) {
-            throw new OperationNotAllowedException("Activity is already registered in the project");
-        }
-         this.activities.add(activity);
-    }
-
-    public Activity getActivity(String activityTitle) {
-        for (Activity act : this.activities) {
-            if (act.getName().equals(activityTitle)) {return act;}
-
-        }
-        return null;
-    }
-    
-    
 }

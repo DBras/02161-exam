@@ -1,5 +1,6 @@
 package plannerapp;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.*;
@@ -48,6 +49,7 @@ public class UserInterface {
                 "project_change_date <project id> <start date> (e.g. project_change_date 22001 2022-06-29) - change project start date\n" +
                 "activity_add <project_id> <activity_name> <expected_hours> <start_year> <start_week> <end_week>" +
                             "(e.g. activity_add 22001 write_methods 10 2022 35 42) - add activity to a project\n" +
+                "project_report <project_id> (e.g. project_report 22001) - create project report\n" +
                 "quit or exit - exit the program\n" +
                 "help or ? - display this help message\n");
     }
@@ -232,6 +234,27 @@ public class UserInterface {
         }
     }
 
+    public void createReport(String[] command_body) {
+        if (command_body.length != 2) {
+            System.out.println(syntax_error_message);
+        } else {
+            try {
+                int project_id = Integer.parseInt(command_body[1]);
+                Project project = this.planner_app.searchProjectsById(project_id);
+                if (project != null) {
+                    System.out.println("No project with that ID found");
+                } else {
+                    project.createReport();
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.println("Project ID was not formatted correctly");
+            } catch (IOException e) {
+                System.out.println("Something went wrong during file creation");
+            }
+        }
+    }
+
     /**
      * Method for running the main CLI loop. Should be called to run the user interface. Relies on other methods for
      * functionality to increase code readability.
@@ -269,6 +292,9 @@ public class UserInterface {
                     break;
                 case "activity_add":
                     addActivity(user_input);
+                    break;
+                case "project_report":
+                    createReport(user_input);
                     break;
                 case "quit":
                 case "exit":

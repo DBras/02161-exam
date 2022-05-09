@@ -12,6 +12,10 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Class of all steps relating to projects
+ * @author Daniel
+ */
 public class ProjectSteps {
     private Project project;
     private LocalDate date;

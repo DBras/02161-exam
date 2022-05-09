@@ -15,6 +15,10 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * All steps relating to creating project report
+ * @author Jonathan
+ */
 public class CreateReportSteps {
 
     private ErrorMessageHolder error_message_holder;

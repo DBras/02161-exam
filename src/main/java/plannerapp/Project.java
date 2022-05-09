@@ -101,10 +101,22 @@ public class Project {
      * Setter method for changing project start date
      * @param start_date LocalDate representing new start date
      */
+
+    /**
+     * Setter method for start date
+     * @author Daniel
+     * @param start_date
+     */
     public void setStartDate(LocalDate start_date) {
         this.start_date = start_date;
     }
-    
+
+    /**
+     * Method for adding activity to the project
+     * @author Johannes
+     * @param activity Activity object
+     * @throws OperationNotAllowedException
+     */
     public void addActivity(Activity activity) throws OperationNotAllowedException{
     	for (Activity a : this.activities) {
     		if (a.getName().equals(activity.getName())) {
@@ -113,7 +125,14 @@ public class Project {
     	}
     	this.activities.add(activity);
     }
-    
+
+    /**
+     * Search all activities by title and start year
+     * @author Johannes
+     * @param activityTitle String of title to search for
+     * @param year Int of year to search for
+     * @return All matching activities
+     */
     public Object[] searchActivitiesByTitleAndStartYear(String activityTitle, int year) {
         List<Activity> activity_matching = new ArrayList<>();
         for (Activity activity : this.activities) {
@@ -123,17 +142,27 @@ public class Project {
         }
         return activity_matching.toArray();
     }
-    
+
+    /**
+     * Method for creating report in .txt format
+     * @author Jonathan
+     * @throws IOException
+     */
     public void createReport() throws IOException {
 
         File file = new File(this.title + ".txt");
         FileWriter fw = new FileWriter(file);
         PrintWriter pw = new PrintWriter(fw);
 
-          pw.print("Developers");
-          pw.print("Date");
-          pw.print("Activity/ pending activity");
+        pw.println(this.title);
+        pw.println(this.start_date);
+        pw.println("\nActivities in the project:");
 
-          pw.close();
+        for (Activity a : activities) {
+            pw.printf("%s starting %s week %s and ends in week %s%n",
+                    a.getName(), a.getYear(), a.getStartWeek(), a.getEndWeek());
+        }
+
+        pw.close();
     }
 }

@@ -12,6 +12,10 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+/**
+ * Class of all steps relating to activities
+ * @author Johannes
+ */
 public class ActivitySteps {
 	
 	ArrayList<Activity> activities;
@@ -131,7 +135,7 @@ public class ActivitySteps {
 	public void theActivityIsChangedToStartYearStartWeekAndEndWeek(String name,
 																   int year, int start_week, int end_week) {
 		try {
-			this.activity.changeStartDate(year, start_week, end_week);
+			this.activity.changeActivityDate(year, start_week, end_week);
 			this.activity.setName(name);
 		} catch (OperationNotAllowedException e) {
 			this.error_message_holder.setErrorMessage(e.getMessage());
