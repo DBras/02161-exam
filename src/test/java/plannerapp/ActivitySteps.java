@@ -126,9 +126,9 @@ public class ActivitySteps {
 	@Then("the activity with title {string}, expected time {int}, start year {int}, start week {int}, and end week {int} is contained in the project")
 	public void theActivityWithTitleExpectedTimeStartYearStartWeekAndEndWeekIsContainedInTheProject(
 			String activityTitle, int expected_hours, int year, int start_week, int end_week) {
-		Object[] activities = this.project.searchActivitiesByTitleAndStartYear(activityTitle, year);
-		assertEquals(1, activities.length);
-		Activity activity = (Activity) activities[0];
+		List<Activity> activities = this.project.searchActivitiesByTitleAndStartYear(activityTitle, year);
+		assertEquals(1, activities.size());
+		Activity activity = (Activity) activities.get(0);
 		assertTrue(activity.getExpectedTime() == expected_hours
 			&& activity.getYear() == year
 			&& activity.getStartWeek() == start_week

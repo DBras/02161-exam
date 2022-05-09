@@ -49,6 +49,8 @@ public class UserInterface {
                 "project_change_date <project id> <start date> (e.g. project_change_date 22001 2022-06-29) - change project start date\n" +
                 "activity_add <project_id> <activity_name> <expected_hours> <start_year> <start_week> <end_week>" +
                             "(e.g. activity_add 22001 write_methods 10 2022 35 42) - add activity to a project\n" +
+                "activity_modify <project_id> <title> <old_year> <new_year> <new_start_week> <new_end_week>" +
+                " (e.g. activity_modify 22001 test 2022 2027 35 42) - modify existing activity's dates\n" +
                 "project_report <project_id> (e.g. project_report 22001) - create project report\n" +
                 "quit or exit - exit the program\n" +
                 "help or ? - display this help message\n");
@@ -249,12 +251,38 @@ public class UserInterface {
                     System.out.println("No project with that ID found");
                 } else {
                     project.createReport();
+                    System.out.println("Project report created");
                 }
 
             } catch (NumberFormatException e) {
                 System.out.println("Project ID was not formatted correctly");
             } catch (IOException e) {
                 System.out.println("Something went wrong during file creation");
+            }
+        }
+    }
+
+    /**
+     * Method for modifying activity dates
+     * @param command_body String array of user command
+     */
+    public void modifyActivity(String[] command_body) {
+        if (command_body.length != 7) {
+            System.out.println(syntax_error_message);
+        } else {
+            try {
+                int project_id = Integer.parseInt(command_body[1]),
+                        old_year = Integer.parseInt(command_body[3]),
+                        new_year = Integer.parseInt(command_body[4]),
+                        new_week_start = Integer.parseInt(command_body[5]),
+                        new_week_end = Integer.parseInt(command_body[6]);
+                Project project = this.planner_app.searchProjectsById(project_id);
+                Activity activity = project.searchActivitiesByTitleAndStartYear(command_body[2], old_year).get(0);
+                activity.changeActivityDate(new_year, new_week_start, new_week_end);
+            } catch (NumberFormatException e) {
+                System.out.println("Input formatted incorrectly. Please verify and consult help page");
+            } catch (OperationNotAllowedException e) {
+                System.out.println(e.getMessage());
             }
         }
     }
@@ -299,6 +327,9 @@ public class UserInterface {
                     break;
                 case "project_report":
                     createReport(user_input);
+                    break;
+                case "activity_modify":
+                    modifyActivity(user_input);
                     break;
                 case "quit":
                 case "exit":

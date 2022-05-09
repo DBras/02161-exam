@@ -128,14 +128,14 @@ public class Project {
      * @param year Int of year to search for
      * @return All matching activities
      */
-    public Object[] searchActivitiesByTitleAndStartYear(String activityTitle, int year) {
+    public List<Activity> searchActivitiesByTitleAndStartYear(String activityTitle, int year) {
         List<Activity> activity_matching = new ArrayList<>();
         for (Activity activity : this.activities) {
             if (activity.getName().equals(activityTitle) && activity.getYear() == year) {
                 activity_matching.add(activity);
             }
         }
-        return activity_matching.toArray();
+        return activity_matching;
     }
 
     /**
